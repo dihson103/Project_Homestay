@@ -1,0 +1,112 @@
+﻿@page
+@model HomestayWeb.Pages.HomeStays.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].HomestayName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Commune)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Homestay[0].Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Homestay) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomestayName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Commune)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.HomestayId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.HomestayId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.HomestayId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="container">
+    <h1>Chọn danh sách tỉnh</h1>
+    <form action="">
+        <select name="" id="province">
+        </select>
+        <select name="" id="district">
+            <option value="">chọn quận</option>
+        </select>
+        <select name="" id="ward">
+            <option value="">chọn phường</option>
+        </select>
+    </form>
+
+
+    <h2 id="result"></h2>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="~/js/address.js"></script>

@@ -1,7 +1,29 @@
+using HomestayWeb.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.AccessDeniedPath = "/Forbidden";
+        options.LogoutPath = "/Logout/Index";
+        options.LoginPath = "/Login/Index";
+    });
+
+builder.Services.AddAuthorization(
+    options => options.AddPolicy("Admin", policy => policy.RequireClaim("Role", Role.ADMIN.ToString()))
+    );
+
+builder.Services.AddDbContext<ProjectHomeStayContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    );
 
 
 var app = builder.Build();
@@ -19,6 +41,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();

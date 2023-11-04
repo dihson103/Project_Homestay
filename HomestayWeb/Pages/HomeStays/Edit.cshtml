@@ -1,0 +1,102 @@
+﻿@page
+@model HomestayWeb.Pages.HomeStays.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Homestay</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Homestay.HomestayId" />
+            <div class="form-group">
+                <label asp-for="Homestay.HomestayName" class="control-label"></label>
+                <input asp-for="Homestay.HomestayName" class="form-control" />
+                <span asp-validation-for="Homestay.HomestayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.Country" class="control-label"></label>
+                <input asp-for="Homestay.Country" class="form-control" />
+                <span asp-validation-for="Homestay.Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.City" class="control-label"></label>
+                <input asp-for="Homestay.City" class="form-control" />
+                <span asp-validation-for="Homestay.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.District" class="control-label"></label>
+                <input asp-for="Homestay.District" class="form-control" />
+                <span asp-validation-for="Homestay.District" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.Commune" class="control-label"></label>
+                <input asp-for="Homestay.Commune" class="form-control" />
+                <span asp-validation-for="Homestay.Commune" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.Address" class="control-label"></label>
+                <input asp-for="Homestay.Address" class="form-control" />
+                <span asp-validation-for="Homestay.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Homestay.Status" /> @Html.DisplayNameFor(model => model.Homestay.Status)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.Type" class="control-label"></label>
+                <input asp-for="Homestay.Type" class="form-control" />
+                <span asp-validation-for="Homestay.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.Price" class="control-label"></label>
+                <input asp-for="Homestay.Price" class="form-control" />
+                <span asp-validation-for="Homestay.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Homestay.Description" class="control-label"></label>
+                <input asp-for="Homestay.Description" class="form-control" />
+                <span asp-validation-for="Homestay.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<div class="container">
+    <h1>Chọn danh sách tỉnh</h1>
+    <form action="">
+        <select name="" id="province">
+        </select>
+        <select name="" id="district">
+            <option value="">chọn quận</option>
+        </select>
+        <select name="" id="ward">
+            <option value="">chọn phường</option>
+        </select>
+    </form>
+
+
+    <h2 id="result"></h2>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="~/js/address.js"></script>

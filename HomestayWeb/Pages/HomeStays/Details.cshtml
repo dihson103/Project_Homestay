@@ -1,0 +1,79 @@
+﻿@page
+@model HomestayWeb.Pages.HomeStays.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Homestay</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.HomestayName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.HomestayName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Country)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Country)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.City)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.District)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.District)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Commune)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Commune)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Type)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Homestay.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Homestay.Description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Homestay?.HomestayId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

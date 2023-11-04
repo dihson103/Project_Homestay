@@ -27,6 +27,32 @@
                         </li>
                     </ul>
                 </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="btn btn-link" asp-page="/Profile">My Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-link" asp-page="/Orders/Index">My Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-link" asp-page="/Carts/Cart">Cart</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-page="/Logout/Index">
+                                    <button type="submit" class="btn btn-link">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <a class="btn btn-link" asp-page="/Register/Index">Register</a>
+                        <a class="btn btn-link" asp-page="/Login/Index">Login</a>
+                    }
+                </div>
             </div>
         </nav>
     </header>
