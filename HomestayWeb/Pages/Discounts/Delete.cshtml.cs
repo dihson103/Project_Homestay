@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HomestayWeb.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace HomestayWeb.Pages.HomeStays
+namespace HomestayWeb.Pages.Discounts
 {
     [Authorize(Policy = "Admin")]
     public class DeleteModel : PageModel
@@ -21,43 +21,40 @@ namespace HomestayWeb.Pages.HomeStays
         }
 
         [BindProperty]
-      public Homestay Homestay { get; set; } = default!;
+      public Discount Discount { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Homestays == null)
+            if (id == null || _context.Discounts == null)
             {
                 return NotFound();
             }
 
-            var homestay = await _context.Homestays.FirstOrDefaultAsync(m => m.HomestayId == id);
+            var discount = await _context.Discounts.FirstOrDefaultAsync(m => m.DiscountId == id);
 
-            if (homestay == null)
+            if (discount == null)
             {
                 return NotFound();
             }
             else 
             {
-                Homestay = homestay;
+                Discount = discount;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.Homestays == null)
+            if (id == null || _context.Discounts == null)
             {
                 return NotFound();
             }
-            var homestay = await _context.Homestays
-                .Include(h => h.Images)
-                .SingleOrDefaultAsync(h => h.HomestayId == id);
+            var discount = await _context.Discounts.FindAsync(id);
 
-            if (homestay != null)
+            if (discount != null)
             {
-                Homestay = homestay;
-                _context.Images.RemoveRange(homestay.Images);
-                _context.Homestays.Remove(Homestay);
+                Discount = discount;
+                _context.Discounts.Remove(Discount);
                 await _context.SaveChangesAsync();
             }
 

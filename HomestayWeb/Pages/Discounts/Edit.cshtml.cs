@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HomestayWeb.Models;
 using Microsoft.AspNetCore.Authorization;
+using HomestayWeb.Validations;
 
-namespace HomestayWeb.Pages.HomeStays
+namespace HomestayWeb.Pages.Discounts
 {
     [Authorize(Policy = "Admin")]
     public class EditModel : PageModel
@@ -22,21 +23,22 @@ namespace HomestayWeb.Pages.HomeStays
         }
 
         [BindProperty]
-        public Homestay Homestay { get; set; } = default!;
+        public Discount Discount { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Homestays == null)
+            if (id == null || _context.Discounts == null)
             {
                 return NotFound();
             }
 
-            var homestay =  await _context.Homestays.FirstOrDefaultAsync(m => m.HomestayId == id);
-            if (homestay == null)
+            var discount =  await _context.Discounts.FirstOrDefaultAsync(m => m.DiscountId == id);
+            if (discount == null)
             {
                 return NotFound();
             }
-            Homestay = homestay;
+            Discount = discount;
+           ViewData["HomstayId"] = new SelectList(_context.Homestays, "HomestayId", "HomestayId");
             return Page();
         }
 
@@ -44,12 +46,13 @@ namespace HomestayWeb.Pages.HomeStays
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            ViewData["HomstayId"] = new SelectList(_context.Homestays, "HomestayId", "HomestayId");
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Homestay).State = EntityState.Modified;
+            _context.Attach(Discount).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +60,7 @@ namespace HomestayWeb.Pages.HomeStays
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!HomestayExists(Homestay.HomestayId))
+                if (!DiscountExists(Discount.DiscountId))
                 {
                     return NotFound();
                 }
@@ -70,9 +73,9 @@ namespace HomestayWeb.Pages.HomeStays
             return RedirectToPage("./Index");
         }
 
-        private bool HomestayExists(int id)
+        private bool DiscountExists(int id)
         {
-          return (_context.Homestays?.Any(e => e.HomestayId == id)).GetValueOrDefault();
+          return (_context.Discounts?.Any(e => e.DiscountId == id)).GetValueOrDefault();
         }
     }
 }

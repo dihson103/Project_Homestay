@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using HomestayWeb.Models;
 using Microsoft.AspNetCore.Authorization;
-using HomestayWeb.Contants;
 
-namespace HomestayWeb.Pages.Users
+namespace HomestayWeb.Pages.Discounts
 {
     [Authorize(Policy = "Admin")]
     public class CreateModel : PageModel
@@ -23,48 +22,27 @@ namespace HomestayWeb.Pages.Users
 
         public IActionResult OnGet()
         {
-            ViewData["Roles"] = new SelectList(Roles.instance);
+        ViewData["HomestayName"] = new SelectList(_context.Homestays, "HomestayId", "HomestayName");
             return Page();
         }
 
         [BindProperty]
-        public User User { get; set; } = default!;
+        public Discount Discount { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid || _context.Users == null || User == null)
+          if (!ModelState.IsValid || _context.Discounts == null || Discount == null)
             {
+                ViewData["HomestayName"] = new SelectList(_context.Homestays, "HomestayId", "HomestayName");
                 return Page();
             }
 
-            if (IsEmailExist(User.Email))
-            {
-                ModelState.AddModelError("Error", "Email is already exist.");
-                return Page();
-            }
-
-            if (IsUserNameExist(User.Username))
-            {
-                ModelState.AddModelError("Error", "Username is already exist.");
-                return Page();
-            }
-
-            _context.Users.Add(User);
+            _context.Discounts.Add(Discount);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
-        }
-
-        private Boolean IsUserNameExist(string userName)
-        {
-            return _context.Users.Any(u => u.Username == userName);
-        }
-
-        private Boolean IsEmailExist(string email)
-        {
-            return _context.Users.Any(u => u.Email== email);
         }
     }
 }

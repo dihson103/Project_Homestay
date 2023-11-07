@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HomestayWeb.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace HomestayWeb.Pages.HomeStays
+namespace HomestayWeb.Pages.Discounts
 {
     [Authorize(Policy = "Admin")]
     public class IndexModel : PageModel
@@ -20,13 +20,15 @@ namespace HomestayWeb.Pages.HomeStays
             _context = context;
         }
 
-        public IList<Homestay> Homestay { get;set; } = default!;
+        public IList<Discount> Discount { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.Homestays != null)
+            if (_context.Discounts != null)
             {
-                Homestay = await _context.Homestays.ToListAsync();
+                Discount = await _context.Discounts
+                    .Include(d => d.Homstay)
+                    .Include(d => d.Homstay).ToListAsync();
             }
         }
     }

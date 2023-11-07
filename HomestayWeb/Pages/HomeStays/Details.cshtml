@@ -3,7 +3,32 @@
 
 @{
     ViewData["Title"] = "Details";
+    var disctrict = Model.Homestay.City;
+    var user = User;
+    var isAdmin = user.HasClaim(c => c.Type == "Role" && c.Value == "ADMIN");
 }
+
+<!-- Modal structure -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Enter password to order homestay</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="password" placeholder="Password" class="form-control" id="confirm-password"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="orderBtn" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <h1>Details</h1>
 
@@ -23,19 +48,19 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Homestay.Country)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2" id="province">
             @Html.DisplayNameFor(model => model.Homestay.City)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Homestay.City)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2" id="district">
             @Html.DisplayNameFor(model => model.Homestay.District)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Homestay.District)
         </dd>
-        <dt class="col-sm-2">
+        <dt class="col-sm-2" id="ward">
             @Html.DisplayNameFor(model => model.Homestay.Commune)
         </dt>
         <dd class="col-sm-10">
@@ -73,7 +98,62 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Homestay?.HomestayId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+
+@if (isAdmin)
+{
+    <div>
+        <a asp-page="./Edit" asp-route-id="@Model.Homestay?.HomestayId">Edit</a> |
+        <a asp-page="./Index">Back to List</a>
+    </div>
+}
+else
+{
+    <div>
+        <form method="post" asp-page-handler="AddToCart" id="orderForm">
+            <input asp-for="CartItem.HomeStayId" class="form-control" name="id" hidden value="@Model.Homestay.HomestayId" />
+            <input type="text" name="password" id="password" hidden />
+            <div class="form-group">
+                <label asp-for="CartItem.DateStart" class="control-label"></label>
+                <input asp-for="CartItem.DateStart" class="form-control" />
+                <span asp-validation-for="CartItem.DateStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CartItem.DateEnd" class="control-label"></label>
+                <input asp-for="CartItem.DateEnd" class="form-control" />
+                <span asp-validation-for="CartItem.DateEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="button" value="Order" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.1/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    const host = "https://provinces.open-api.vn/api/";
+
+    axios.get(host + 'p/@disctrict')
+        .then((response) => {
+            document.getElementById('province').innerHTML = `
+                <dt class="col-sm-2" id="province">
+                        ${response.data.name}
+            </dt>
+            `
+            
+            console.log(response.data.name)
+        });
+
+    $('#orderBtn').click(() => {
+        $('#password').val($('#confirm-password').val());
+        $('#orderForm').submit();
+    });
+
+    
+</script>
