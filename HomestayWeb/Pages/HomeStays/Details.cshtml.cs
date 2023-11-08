@@ -10,6 +10,7 @@ using Microsoft.Identity.Client;
 using HomestayWeb.Dtos;
 using Newtonsoft.Json;
 using System.Security.Claims;
+using HomestayWeb.Contants;
 
 namespace HomestayWeb.Pages.HomeStays
 {
@@ -49,10 +50,11 @@ namespace HomestayWeb.Pages.HomeStays
         {
             var user = HttpContext.User;
             var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string message;
 
             if (username == null)
             {
-                string message = "Please login to order.";
+                message = "Please login to order.";
                 return RedirectToPage("/Login/Index", new { message });
             }
 
@@ -64,28 +66,69 @@ namespace HomestayWeb.Pages.HomeStays
 
             if (password == null)
             {
-                string message = "Please enter your password to order";
+                message = "Please enter your password to order";
                 return RedirectToAction("/HomeStays/Details", new {id, message});
             }
 
-            if (!isValidPassword(username, password))
+            User? customer = _context.Users.SingleOrDefault(u => u.Password == password && u.Username == username);
+            if(customer == null)
             {
-                string message = "Password is invalid";
+                message = "Password is invalid";
                 return RedirectToAction("/HomeStays/Details", new { id, message });
             }
 
-            // If everything is valid, you can proceed with the action
-            // ...
+            DateTime currentDate = DateTime.Now;
+            Order order = new Order()
+            {
+                UserId = customer.UserId,
+                HomestayId = id,
+                OrderDate = currentDate,
+                Status = OrderStatus.PENDING_CONFIRM
+            };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
 
-            return Page(); // Or Redirect to another page if needed
+             
+            OrderDetail orderDetail = new OrderDetail()
+            {
+                OrderId = order.OrderId,
+                FromDate = CartItem.DateStart,
+                EndDate = CartItem.DateEnd,
+                PriceWhenSell = getPriceWhenSell(id, currentDate),
+                IsPayment = false
+            };
+
+            message = "Order request is pending confirm";
+            return RedirectToAction("/HomeStays/Details", new { id, message });
         }
 
-
-        private bool isValidPassword(string username, string password)
+        private decimal getPriceWhenSell(int homstayId, DateTime currentDate)
         {
-            return _context.Users.Any(u => u.Password == password && u.Username == username);
-        }
+            decimal price = 0;
 
+            List<Discount> discounts = _context.Discounts
+                .Where(d => d.HomstayId == homstayId && d.DateStart <= currentDate && d.DateEnd >= currentDate)
+                .ToList();
+
+            Homestay? homestay = _context.Homestays.SingleOrDefault(d => d.HomestayId == homstayId);
+
+            decimal totalDiscount = 0;
+            if (homestay != null)
+            {
+                decimal homestayPrice = homestay.Price;
+
+                if (homestayPrice != 0 && discounts.Any())
+                {
+                    totalDiscount = discounts.Sum(x => ((decimal)x.Discount1 / 100) * homestayPrice);
+                }
+
+                price = homestay.Price - totalDiscount;
+
+                return price < 0 ? 0 : price;
+            }
+
+            throw new NotImplementedException();
+        }
 
     }
 }
