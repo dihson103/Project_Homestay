@@ -3,26 +3,26 @@
 @{
     ViewData["Title"] = "Home page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome @User.Claims.FirstOrDefault()?.Value</h1>
+<link href="~/css/Home.css" rel="stylesheet" />
+<div class="text-center" style="">
+    <h1 style="color:#5c5d5e;margin-bottom:20px;">CONTINENTAL HOMESTAY </h1>
 </div>
 
-
 <div class="container">
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-4">
         @foreach(var homestay in Model.Homestays)
         {
-            <div class="col-sm-4 mt-5">
-                <div class="card" style="width: 18rem;">
-                    <img src="@homestay.Images.First().Link" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">@homestay.HomestayName</h5>
-                        <p class="card-text">@homestay.Price$ / night</p>
-                        <a href="/HomeStays/Details?id=@homestay.HomestayId" class="btn btn-primary">View details</a>
+        <div class="col mb-4" style="height:400px">
+            <div class="homestay">
+                <a href="/HomeStays/Details?id=@homestay.HomestayId" style="text-decoration:none">
+                    <img src="@homestay.Images.First().Link" class="card-img-top" alt="..." style="margin-bottom: 20px;">
+                    <div class="overlay">
+                        <h5 class="card-title" style="color:black">@homestay.HomestayName</h5>
+                        <p class="card-text" style="color: black">@homestay.Price$ / night</p>
                     </div>
-                </div>
+                </a>
             </div>
+        </div>
         }
     </div>
 </div>
