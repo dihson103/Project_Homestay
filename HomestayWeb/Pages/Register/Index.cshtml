@@ -1,62 +1,58 @@
 ﻿@page
 @model HomestayWeb.Pages.Register.IndexModel
 @{
+    Layout = null;
 }
+<link href="~/css/login.css" rel="stylesheet" />
 
-<h1>Register</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
+<div class="container">
+     <form method="post" class="box">
+         <div class="login">
+             <h2>Đăng ký</h2>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="User.Fullname" class="control-label"></label>
-                <input asp-for="User.Fullname" class="form-control" />
+                
+                <input asp-for="User.Fullname" class="form-control" placeholder="Tên của bạn"/>
                 <span asp-validation-for="User.Fullname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="User.Email" class="control-label"></label>
-                <input asp-for="User.Email" class="form-control" />
+                <input asp-for="User.Email" class="form-control" placeholder="Email của bạn"/>
                 <span asp-validation-for="User.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="User.Username" class="control-label"></label>
-                <input asp-for="User.Username" class="form-control" />
+                <input asp-for="User.Username" class="form-control" placeholder="Tên đăng nhập" />
                 <span asp-validation-for="User.Username" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="User.Password" class="control-label"></label>
-                <input asp-for="User.Password" class="form-control" />
+                <input asp-for="User.Password" class="form-control" placeholder="Nhập mật khẩu"/>
                 <span asp-validation-for="User.Password" class="text-danger"></span>
             </div>
             <div class="form-group" hidden>
-                <label asp-for="User.Role" class="control-label"></label>
                 <input asp-for="User.Role" value="USER" readonly class="form-control" />
                 <span asp-validation-for="User.Role" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="User.Gender" class="control-label"></label>
+            <div >
+                <label asp-for="User.Gender" class="control-label" style="font-size:larger">Giới tính</label>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" asp-for="User.Gender" value="true" id="male" checked>
-                    <label class="form-check-label" for="male">
-                        Male
+                    <label class="form-check-label" for="male" style="font-size:larger">
+                        Nam
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" asp-for="User.Gender" value="false" id="female">
-                    <label class="form-check-label" for="female">
-                        Female
+                    <label class="form-check-label" for="female" style="font-size:larger">
+                       Nữ
                     </label>
                 </div>
                 <span asp-validation-for="User.Gender" class="text-danger"></span>
             </div>
-            <div class="form-group mt-3">
-                <input type="submit" value="Register" class="btn btn-primary" />
+            <button type="submit">Đăng ký</button>
+
+            <div style="text-align:end  ;font-size:larger">
+                <a asp-page="/Login/Index"> Back to Login</a>
             </div>
-        </form>
-    </div>
+         </div>
+    </form>
 </div>
 
-<div>
-    <a asp-page="/Login/Index">Back to Login</a>
-</div>
