@@ -7,6 +7,19 @@
 <link href="~/css/Manager.css" rel="stylesheet" />
 <h1>Danh sách người dùng</h1>
 
+<form class="form-inline" method="post">
+  <input type="text" asp-for="SearchDto.SearchValue" placeholder="Search value" />
+  <select asp-for="SearchDto.Role">
+      <option value="ADMIN">ADMIN</option>
+        <option value="USER">USER</option>
+  </select>
+  <select asp-for="SearchDto.Status">
+      <option value="true">ACTIVE</option>
+      <option value="false">INACTIVE</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
 <p>
     <a class="btn_action" asp-page="Create">Thêm người dùng</a>
 </p>
@@ -23,7 +36,7 @@
                Vai trò
             </th>
             <th>
-                Mật khẩu
+                Trạng thái
             </th>
             <th>
                Tên đầy đủ
@@ -47,7 +60,7 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                <p>*********</p>
+                @(item.Status ? "ACTIVE" : "INACTIVE")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Fullname)
