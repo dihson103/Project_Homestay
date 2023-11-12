@@ -6,6 +6,9 @@ body {
     background-size: cover;
     font-family: 'Quicksand', sans-serif;
 }
+input::placeholder {
+    color: white !important;
+}
 .container{
 
     display: flex;
@@ -60,11 +63,9 @@ button{
     font-size: large;
     font-weight: 600 ;
     margin: 20px 0;
+    border-radius:20px !important;
 }
-::placeholder{
-    color: white;
-    font-size: large;
-}
+
 #login-message.success{
     text-align: center;
     font-size: larger;
