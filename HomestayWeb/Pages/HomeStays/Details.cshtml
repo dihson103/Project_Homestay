@@ -60,7 +60,7 @@
             <dt class="col-sm-5">
                 Tình trạng phòng
             </dt>
-            <dd class="col-sm-7">
+            <dd class="col-sm-7" style="color:#e67070 ">
                 @Html.DisplayFor(model => model.Homestay.Type)
             </dd>
         <dt>
@@ -99,9 +99,10 @@
 <div class="col-md-4 ">
 @if (isAdmin)
 {
-    <div>
-        <a asp-page="./Edit" asp-route-id="@Model.Homestay?.HomestayId">Edit</a> |
-        <a asp-page="./Index">Back to List</a>
+    <div class="text-center action-admin">
+                <div style="margin:50px;"><a class="btn-success" asp-page="./Edit" asp-route-id="@Model.Homestay?.HomestayId">Chỉnh sửa thông tin</a> </div>
+                <div style="margin:50px;"><a class="btn-danger" asp-page="./Index">Trở về trang danh sách</a></div>
+        
     </div>
 }
 else
@@ -115,12 +116,12 @@ else
             <input asp-for="CartItem.HomeStayId" class="form-control" name="id" hidden value="@Model.Homestay.HomestayId" />
             <input type="text" name="password" id="password" hidden />
             <div class="form-group">
-                <label asp-for="CartItem.DateStart" class="control-label"></label>
+                <label asp-for="CartItem.DateStart" class="control-label">Ngày bắt đầu</label>
                 <input asp-for="CartItem.DateStart" class="form-control" />
                 <span asp-validation-for="CartItem.DateStart" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CartItem.DateEnd" class="control-label"></label>
+                <label asp-for="CartItem.DateEnd" class="control-label">Ngày kết thúc</label>
                 <input asp-for="CartItem.DateEnd" class="form-control" />
                 <span asp-validation-for="CartItem.DateEnd" class="text-danger"></span>
             </div>

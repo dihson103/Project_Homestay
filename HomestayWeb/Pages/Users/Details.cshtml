@@ -4,12 +4,13 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>User</h4>
-    <hr />
+<link href="~/css/edit.css" rel="stylesheet" />
+<div class="d-flex justify-content-between">
+    <h1>Thông tin tài khoản</h1>
+    <h2 style="align-items:center"><a asp-page="./Index" class="btn-close"></a></h2>
+</div>
+<hr />
+<div style="margin-bottom:100px">
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.User.Username)
@@ -55,7 +56,4 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.User?.UserId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+

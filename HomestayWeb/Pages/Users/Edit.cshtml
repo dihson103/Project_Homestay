@@ -4,13 +4,15 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>User</h4>
+<link href="~/css/edit.css" rel="stylesheet" />
+<div class="d-flex justify-content-around">
+<h1>Chỉnh sửa thông tin người dùng </h1>
+ <h2 style="align-items:center"><a asp-page="./Index" class="btn-close"></a></h2>
+</div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="User.UserId" />
@@ -56,9 +58,7 @@
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
