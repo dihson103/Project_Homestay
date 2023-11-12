@@ -34,7 +34,10 @@ namespace HomestayWeb.Pages.HomeStays
                 return NotFound();
             }
 
-            var homestay = await _context.Homestays.FirstOrDefaultAsync(m => m.HomestayId == id);
+            var homestay = await _context.Homestays
+                .Include(h => h.Images)
+                .FirstOrDefaultAsync(m => m.HomestayId == id);
+
             if (homestay == null)
             {
                 return NotFound();
