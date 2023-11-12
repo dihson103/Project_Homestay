@@ -26,8 +26,29 @@ namespace HomestayWeb.Pages.Orders
             {
                 Order = await _context.Orders
                 .Include(o => o.Homestay)
-                .Include(o => o.User).ToListAsync();
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails)
+                .ToListAsync();
             }
+        }
+
+        public IActionResult OnPost(int id, string status)
+        {
+            var order = _context.Orders.SingleOrDefault(o => o.OrderId== id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            order.Status = status;
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+
+            Order = _context.Orders
+                .Include(o => o.Homestay)
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails)
+                .ToList();
+            return Page();
         }
     }
 }

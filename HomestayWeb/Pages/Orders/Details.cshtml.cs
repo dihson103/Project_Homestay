@@ -27,7 +27,11 @@ namespace HomestayWeb.Pages.Orders
                 return NotFound();
             }
 
-            var order = await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
+            var order = await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Homestay)
+                .Include(o => o.OrderDetails)
+                .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
             {
                 return NotFound();
