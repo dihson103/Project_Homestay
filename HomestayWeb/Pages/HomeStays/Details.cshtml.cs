@@ -34,6 +34,18 @@ namespace HomestayWeb.Pages.HomeStays
                 return NotFound();
             }
 
+            var user = HttpContext.User;
+            var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = user.FindFirst("Role")?.Value;
+
+            if(!string.IsNullOrEmpty(role) && "ADMIN".Equals(role))
+            {
+                Homestay = await _context.Homestays
+                .Include(h => h.Images)
+                .FirstOrDefaultAsync(m => m.HomestayId == id);
+                return Page();
+            }
+
             var homestay = await _context.Homestays
                 .Include(h => h.Images)
                 .FirstOrDefaultAsync(m => m.HomestayId == id && m.Status);

@@ -33,7 +33,7 @@ namespace HomestayWeb.Pages.HomeStays
         public PaginatedList<Homestay> Homestay { get; set; } = default!;
         [BindProperty]
         public Search Search { get; set; } = default!;
-        private int pageSize = 1;
+        private int pageSize = 3;
 
         public async Task OnGetAsync(int? pageIndex)
         {

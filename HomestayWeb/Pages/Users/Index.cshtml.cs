@@ -31,7 +31,7 @@ namespace HomestayWeb.Pages.Users
         public PaginatedList<User> User { get; set; } = default!;
         [BindProperty]
         public UserSearchDto SearchDto { get; set; }
-        private int pageSize = 1;
+        private int pageSize = 3;
         
 
         public async Task OnGetAsync(int? pageIndex)
