@@ -11,7 +11,7 @@ body {
    .btn_order
 {
     width: 100%;
-    background-color: #f25788;
+    background-color: #e87c46;
     color: white;
     padding: 10px;
     border-radius: 15px;
@@ -21,4 +21,8 @@ body {
 .carousel-inner img {
     max-height: 600px; /* Điều chỉnh giới hạn chiều cao tại đây */
     width: auto; /* Đảm bảo tỷ lệ khung hình không bị biến đổi */
+}
+.action-admin a{
+    padding :20px;
+    border-radius:30px;
 }

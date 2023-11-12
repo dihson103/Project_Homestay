@@ -2,10 +2,15 @@
 @model HomestayWeb.Pages.Profile.IndexModel
 @{
 }
-<h1>Profile</h1>
+<link href="~/css/edit.css" rel="stylesheet" />
+<div class="d-flex justify-content-around">
+    <h1>Thông tin tài khoản</h1>
+    <h2 style="align-items:center"><a asp-area="" asp-page="/Index" class="btn-close"></a></h2>
+</div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Customer.UserId" />
@@ -63,9 +68,6 @@
     </div>
 </div>
 
-<div>
-    <a asp-page="/Index">Back to home</a>
-</div>
 
 <script>
     var message = '@Model.Message'
