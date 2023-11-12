@@ -5,10 +5,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    body{
+        background-color: #bcdbe0 !important;
+    }
+</style>
+<h1>Danh sách đặt phòng</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-outline-dark">Tạo mới</a>
 </p>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -87,8 +92,8 @@
             </td>
                 <td>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="handleStartUpdate('@item.OrderId', '@item.Status')">Change status</button>
-                    <a asp-page="./Details" asp-route-id="@item.OrderId" class="btn btn-link">Details</a>
-                </td>
+                    <a asp-page="./Details" class="btn btn-primary " asp-route-id="@item.OrderId" >Details</a>
+                </td> 
 
         </tr>
 }
