@@ -5,10 +5,11 @@
     ViewData["Title"] = "Index";
 }
 <link href="~/css/Manager.css" rel="stylesheet" />
+<link href="~/css/home.css" rel="stylesheet" />
 <h1>Danh sách HomeStay</h1>
 
-<form method="post">
-    <input type="text" name="searchString"/>
+<form method="post" class="search">
+    <input type="text" name="searchString" placeholder="Nhập Homestay bạn muốn tìm ..." />
     <div class="form-group">
         <select class="form-control" id="province">
               <option value="" class="text-primary">Chọn City</option>
