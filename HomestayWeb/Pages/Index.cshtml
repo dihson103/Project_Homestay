@@ -36,15 +36,15 @@
 
 <div class="container">
     <div class="row row-cols-1 row-cols-md-4">
-        @foreach(var homestay in Model.Homestays)
+        @foreach(var item in Model.Homestays)
         {
         <div class="col mb-4" style="height:400px">
             <div class="homestay">
-                <a href="/HomeStays/Details?id=@homestay.HomestayId" style="text-decoration:none">
-                    <img src="@homestay.Images.First().Link" class="card-img-top" alt="..." style="margin-bottom: 20px;">
+                <a href="/HomeStays/Details?id=@item.HomestayId" style="text-decoration:none">
+                    <img src="@item.Images.First().Link" class="card-img-top" alt="..." style="margin-bottom: 20px;">
                     <div class="overlay">
-                        <h5 class="card-title" style="color:black">@homestay.HomestayName</h5>
-                        <p class="card-text" style="color: black">@homestay.Price$ / night</p>
+                        <h5 class="card-title" style="color:black">@item.HomestayName</h5>
+                            <p class="card-text" style="color: black">@item.Price.ToString("0.00")$ / night</p>
                     </div>
                 </a>
             </div>

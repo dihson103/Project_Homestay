@@ -21,10 +21,10 @@
                 @Html.DisplayNameFor(model => model.Order[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Order[0].Homestay)
+                @Html.DisplayNameFor(model => model.Order[0].Homestay.HomestayName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Order[0].User)
+                @Html.DisplayNameFor(model => model.Order[0].User.Fullname)
             </th>
             <th></th>
         </tr>
@@ -39,15 +39,13 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Homestay.HomestayId)
+                @Html.DisplayFor(modelItem => item.Homestay.HomestayName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
+                @Html.DisplayFor(modelItem => item.User.Fullname)
             </td>
             <td>
-                    <a class="btn btn-outline-success" asp-page="./Edit" asp-route-id="@item.OrderId">Edit</a> |
-                    <a class="btn btn-outline-success" asp-page="./Details" asp-route-id="@item.OrderId">Details</a> |
-                    <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@item.OrderId">Delete</a>
+                   <a class="btn btn-outline-success" asp-page="/Orders/Details" asp-route-id="@item.OrderId">Details</a>
             </td>
         </tr>
 }

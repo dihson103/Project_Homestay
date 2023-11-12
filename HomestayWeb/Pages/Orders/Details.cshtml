@@ -80,6 +80,18 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Order.Status)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.Homestay.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Homestay.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Order.OrderDetails.FirstOrDefault().PriceWhenSell)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.OrderDetails.FirstOrDefault().PriceWhenSell)
+        </dd>
     </dl>
 </div>
 <div>

@@ -1,4 +1,5 @@
-﻿using HomestayWeb.Models;
+﻿using HomestayWeb.Dtos;
+using HomestayWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,35 @@ namespace HomestayWeb.Pages
             }
 
             Homestays = query.ToList();
+
+        }
+
+        private decimal getPriceWhenSell(int homstayId, DateTime currentDate)
+        {
+            decimal price = 0;
+
+            List<Discount> discounts = _context.Discounts
+                .Where(d => d.HomstayId == homstayId && d.DateStart <= currentDate && d.DateEnd >= currentDate)
+                .ToList();
+
+            Homestay? homestay = _context.Homestays.SingleOrDefault(d => d.HomestayId == homstayId);
+
+            decimal totalDiscount = 0;
+            if (homestay != null)
+            {
+                decimal homestayPrice = homestay.Price;
+
+                if (homestayPrice != 0 && discounts.Any())
+                {
+                    totalDiscount = discounts.Sum(x => ((decimal)x.Discount1 / 100) * homestayPrice);
+                }
+
+                price = homestay.Price - totalDiscount;
+
+                return price < 0 ? 0 : price;
+            }
+
+            throw new Exception("Homestay not found");
         }
 
 

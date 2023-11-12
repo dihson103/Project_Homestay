@@ -26,6 +26,7 @@ namespace HomestayWeb.Pages.HomeStays
         public Homestay Homestay { get; set; } = default!;
         [BindProperty]
         public CartItem CartItem { get; set; } = default!;
+        public decimal PriceWhenSell { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -41,8 +42,12 @@ namespace HomestayWeb.Pages.HomeStays
             if(!string.IsNullOrEmpty(role) && "ADMIN".Equals(role))
             {
                 Homestay = await _context.Homestays
-                .Include(h => h.Images)
-                .FirstOrDefaultAsync(m => m.HomestayId == id);
+                        .Include(h => h.Images)
+                        .Include(h => h.Discounts)
+                        .FirstOrDefaultAsync(m => m.HomestayId == id);
+
+                PriceWhenSell = getPriceSell(Homestay);
+                
                 return Page();
             }
 
@@ -61,6 +66,21 @@ namespace HomestayWeb.Pages.HomeStays
             return Page();
         }
 
+        private decimal getPriceSell(Homestay homestay)
+        {
+            var discount = homestay.Discounts;
+            var priceWhenSell = homestay.Price;
+            var currentDate = DateTime.Now;
+            if (discount != null)
+            {
+                decimal totalDiscount = discount
+                    .Where(d => d.DateStart <= currentDate && d.DateEnd >= currentDate)
+                    .Sum(x => ((decimal)x.Discount1 / 100) * priceWhenSell);
+                priceWhenSell -= totalDiscount;
+            }
+            return priceWhenSell;
+        }
+
         public IActionResult OnPostAddToCart(string? password, int id)
         {
             try
@@ -71,11 +91,12 @@ namespace HomestayWeb.Pages.HomeStays
                 if (!ModelState.IsValid)
                 {
                     Homestay = _context.Homestays.Include(h => h.Images).SingleOrDefault(m => m.HomestayId == id && m.Status);
+                    PriceWhenSell = getPriceSell(Homestay);
                     return Page();
                 }
 
                 // Check homestay availability
-                CheckHomestayAvailability(id);
+                CheckHomestayAvailability(id, CartItem.DateStart, CartItem.DateEnd);
 
                 // Get user
                 var customer = GetUser(username, password);
@@ -85,9 +106,6 @@ namespace HomestayWeb.Pages.HomeStays
 
                 // Create order detail
                 CreateOrderDetail(order.OrderId, CartItem.DateStart, CartItem.DateEnd, id);
-
-                // Update homestay
-                UpdateHomestayStatus(id);
 
                 return RedirectToAction("/HomeStays/Details", new { id, message = "Order request is pending confirm" });
             }
@@ -110,20 +128,40 @@ namespace HomestayWeb.Pages.HomeStays
             return username;
         }
 
-        private void CheckHomestayAvailability(int id)
+        private void CheckHomestayAvailability(int id, DateTime fromDate, DateTime endDate)
         {
-            Homestay = _context.Homestays.Include(h => h.Images).SingleOrDefault(m => m.HomestayId == id && m.Status);
+            // Retrieve homestay with images
+            Homestay = _context.Homestays
+                .Include(h => h.Images)
+                .SingleOrDefault(m => m.HomestayId == id && m.Status);
 
             if (Homestay == null)
             {
                 throw new Exception($"Can not find homestay with id: {id}");
             }
 
-            if (!Homestay.Type.Equals(HomeStayType.AVAILABLE))
+            if (Homestay.Type != HomeStayType.AVAILABLE)
             {
                 throw new Exception("This homestay is not available to order");
             }
+
+            var currentDate = DateTime.Now;
+
+            // Retrieve orders for the homestay where the current date is within the order period
+            var orders = _context.Orders
+                .Where(o => o.HomestayId == id && currentDate <= o.OrderDetails.FirstOrDefault().FromDate);
+
+            // Check if there are any overlapping orders for the specified date range
+            var isValidOrder = orders.Any(o =>
+                    (o.OrderDetails.FirstOrDefault().FromDate <= fromDate && o.OrderDetails.FirstOrDefault().EndDate >= fromDate)
+                    || (o.OrderDetails.FirstOrDefault().FromDate <= endDate && o.OrderDetails.FirstOrDefault().EndDate >= endDate));
+
+            if (isValidOrder)
+            {
+                throw new Exception("Homestay in this date range was already ordered.");
+            }
         }
+
 
         private User GetUser(string username, string password)
         {
