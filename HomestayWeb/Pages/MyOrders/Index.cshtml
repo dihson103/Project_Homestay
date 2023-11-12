@@ -4,12 +4,13 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link href="~/css/edit.css" rel="stylesheet" />
 
-<h1>Index</h1>
+<div class="d-flex justify-content-between">
+    <h1>Danh sách phòng đã đặt</h1>
+    <h2 style="align-items:center"><a asp-area="" asp-page="/Index" class="btn-close"></a></h2>
+</div>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -44,9 +45,9 @@
                 @Html.DisplayFor(modelItem => item.User.UserId)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.OrderId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.OrderId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.OrderId">Delete</a>
+                    <a class="btn btn-outline-success" asp-page="./Edit" asp-route-id="@item.OrderId">Edit</a> |
+                    <a class="btn btn-outline-success" asp-page="./Details" asp-route-id="@item.OrderId">Details</a> |
+                    <a class="btn btn-outline-danger" asp-page="./Delete" asp-route-id="@item.OrderId">Delete</a>
             </td>
         </tr>
 }

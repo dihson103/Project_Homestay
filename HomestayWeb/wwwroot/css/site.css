@@ -14,5 +14,19 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+
+}
+
+.khung {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
 }
