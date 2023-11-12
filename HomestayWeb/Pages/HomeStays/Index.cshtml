@@ -4,45 +4,41 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+<link href="~/css/Manager.css" rel="stylesheet" />
+<h1>Danh sách HomeStay</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn_action"  asp-page="Create">Thêm HomeStay mới</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].HomestayName)
+               Tên HomeStay
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Country)
+                Đất nước
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].City)
+                Thành phố
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].District)
+               Huyện
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Commune)
+                Xã
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Address)
+                Cụ thể
+            </th>
+
+            <th>
+               Trạng thái
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Status)
+                Giá
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Homestay[0].Description)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -67,25 +63,57 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
+                @if (item.Status)
+                {
+                    <text>ACTIVE</text>
+                }
+                else
+                {
+                    <text>INACTIVE</text>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
+ 
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.HomestayId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.HomestayId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.HomestayId">Delete</a>
+                    <div style="margin-top:5px;">
+                        <a class="btn_action" asp-page="./Edit" asp-route-id="@item.HomestayId">Edit</a>
+
+                    </div>
+                    <div style="margin-top:5px;">
+                        <a class="btn_action" asp-page="./Details" asp-route-id="@item.HomestayId">Details</a>
+
+                    </div>
+                    <div style="margin-top:5px;">
+                        @if (item.Status)
+                        {
+                            <a class="btn_action" style="color:orange" asp-page="./Delete" asp-route-id="@item.HomestayId">Delete</a>
+                        }else{
+                            <button class="btn_action" style="color:orange" asp-page="./Delete" disabled asp-route-id="@item.HomestayId">Delete</button>
+                        }
+                    </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
 
+@{
+    var prevDisabled = !Model.Homestay.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Homestay.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.Homestay.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.Homestay.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>

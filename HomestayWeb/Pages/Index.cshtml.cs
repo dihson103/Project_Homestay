@@ -22,6 +22,7 @@ namespace HomestayWeb.Pages
         {
             Homestays = _context.Homestays
                 .Include(h => h.Images)
+                .Where(h => h.Status)
                 .ToList();
         }
     }

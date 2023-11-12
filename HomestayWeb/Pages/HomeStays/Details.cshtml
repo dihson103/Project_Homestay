@@ -7,6 +7,8 @@
     var user = User;
     var isAdmin = user.HasClaim(c => c.Type == "Role" && c.Value == "ADMIN");
 }
+<link href="~/css/detail.css" rel="stylesheet" />
+
 <!-- Modal structure -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -29,75 +31,72 @@
 </div>
 
 
-<h1>Details</h1>
+<div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @foreach (var image in Model.Homestay.Images)
+        {
+            <div class="carousel-item @(image == Model.Homestay.Images.First() ? "active" : "")" data-bs-interval="5000">
+                <img src="@image.Link" class="d-block w-100" alt="Image">
+            </div>
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<div class="row" style="margin-top:40px;">
+    <h3>Homestay @Html.DisplayFor(model => model.Homestay.HomestayName) </h3>
+    
+<div class="col-md-8">
 
-<div>
-    <h4>Homestay</h4>
-    <hr />
+  
+
     <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.HomestayName)
+            <dt class="col-sm-5">
+                Tình trạng phòng
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Homestay.Type)
+            </dd>
+        <dt>
+            Là một HomeStay đầy mộng mơ nằm tại
+                @Html.DisplayFor(model => model.Homestay.Commune) @Html.DisplayFor(model => model.Homestay.District) của @Html.DisplayFor(model => model.Homestay.City).
+                Địa chỉ cụ thể : @Html.DisplayFor(model => model.Homestay.Address) 
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.HomestayName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.Country)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.Country)
-        </dd>
-        <dt class="col-sm-2" id="province">
-            @Html.DisplayNameFor(model => model.Homestay.City)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.City)
-        </dd>
-        <dt class="col-sm-2" id="district">
-            @Html.DisplayNameFor(model => model.Homestay.District)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.District)
-        </dd>
-        <dt class="col-sm-2" id="ward">
-            @Html.DisplayNameFor(model => model.Homestay.Commune)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.Commune)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.Address)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.Address)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.Status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.Type)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Homestay.Type)
-        </dd>
+        
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Homestay.Price)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Homestay.Price)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.Description)
+        <dt>
+            Mô tả chi tiết :
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-12">
             @Html.DisplayFor(model => model.Homestay.Description)
+        </dd>
+        <dt>
+                Tiện nghi khách có quyền sử dụng
+        </dt>
+        <dd>
+                Bạn sẽ có toàn bộ căn hộ cho riêng mình trong thời gian lưu trú.
+                Căn hộ riêng tư với đầy đủ tiện nghi. Bao gồm giường cỡ queen, phòng tắm riêng, điều hòa không khí, TV internet, Wifi miễn phí, tủ lạnh, đồ vệ sinh cá nhân, máy sấy tóc, lược, bàn chải đánh răng, xà phòng rửa tay.
+                Bạn có thể tận hưởng bể bơi ngoài trời hiện đại, bể bơi trong nhà, tập thể dục trong phòng tập thể dục được trang bị đầy đủ tiện nghi. Phí cho người không phải là cư dân là 200.000 VND/người/lần.
+        </dd>
+        <dd>
+                Khách có thể đỗ xe ô tô/xe máy trong căn hộ với mức phí 5.000 đồng/lượt vào; qua đêm 35.000đ/ lượt; ô tô là 15.000đ/giờ.
+                Highlands Coffee, rau tươi, Winmart +. Các cửa hàng trái cây, và một nhà thuốc cũng nằm trong khu phức hợp với chưa đầy 5 phút đi bộ.
         </dd>
     </dl>
 </div>
 
+<div class="col-md-4 ">
 @if (isAdmin)
 {
     <div>
@@ -107,8 +106,12 @@
 }
 else
 {
-    <div>
+            <div class=" border border-success form-book">
         <form method="post" asp-page-handler="AddToCart" id="orderForm">
+                <dt>
+                        @Html.DisplayFor(model => model.Homestay.Price) VNĐ / Ngày
+                </dt>
+                    
             <input asp-for="CartItem.HomeStayId" class="form-control" name="id" hidden value="@Model.Homestay.HomestayId" />
             <input type="text" name="password" id="password" hidden />
             <div class="form-group">
@@ -122,11 +125,13 @@ else
                 <span asp-validation-for="CartItem.DateEnd" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="button" value="Order" data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary" />
+                        <input type="button" value="Order" data-toggle="modal" data-target="#exampleModalCenter" class="btn_order" />
             </div>
         </form>
     </div>
 }
+    </div>
+</div>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

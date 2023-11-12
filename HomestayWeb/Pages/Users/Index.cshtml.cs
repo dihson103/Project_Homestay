@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using HomestayWeb.Models;
 using Microsoft.AspNetCore.Authorization;
+using HomestayWeb.Utils;
 
 namespace HomestayWeb.Pages.Users
 {
@@ -20,13 +21,23 @@ namespace HomestayWeb.Pages.Users
             _context = context;
         }
 
-        public IList<User> User { get;set; } = default!;
+        public PaginatedList<User> User { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(int? pageIndex)
         {
+            int pageSize = 1;
+            if (pageIndex == null)
+            {
+                pageSize = 1;
+            }
+
             if (_context.Users != null)
             {
-                User = await _context.Users.ToListAsync();
+                var users = _context.Users;
+                User = await PaginatedList<User>.CreateAsync(
+                            users.AsNoTracking(),
+                            pageIndex ?? 1, pageSize
+                         );
             }
         }
     }

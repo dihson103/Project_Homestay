@@ -21,7 +21,7 @@ namespace HomestayWeb.Pages.HomeStays
         }
 
         [BindProperty]
-      public Homestay Homestay { get; set; } = default!;
+        public Homestay Homestay { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,7 +30,7 @@ namespace HomestayWeb.Pages.HomeStays
                 return NotFound();
             }
 
-            var homestay = await _context.Homestays.FirstOrDefaultAsync(m => m.HomestayId == id);
+            var homestay = await _context.Homestays.FirstOrDefaultAsync(m => m.HomestayId == id && m.Status);
 
             if (homestay == null)
             {
@@ -43,22 +43,21 @@ namespace HomestayWeb.Pages.HomeStays
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public IActionResult OnPostAsync(int? id)
         {
             if (id == null || _context.Homestays == null)
             {
                 return NotFound();
             }
-            var homestay = await _context.Homestays
-                .Include(h => h.Images)
-                .SingleOrDefaultAsync(h => h.HomestayId == id);
+            var homestay = _context.Homestays
+                .SingleOrDefault(h => h.HomestayId == id && h.Status);
 
             if (homestay != null)
             {
                 Homestay = homestay;
-                _context.Images.RemoveRange(homestay.Images);
-                _context.Homestays.Remove(Homestay);
-                await _context.SaveChangesAsync();
+                Homestay.Status = false;
+                _context.Homestays.Update(Homestay);
+                _context.SaveChanges();
             }
 
             return RedirectToPage("./Index");

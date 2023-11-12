@@ -1,24 +1,51 @@
 ﻿@page
 @model HomestayWeb.Pages.Login.IndexModel
 @{
+    Layout = null;
 }
+<link href="~/css/login.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-<form method="post" style="width: 500px">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="UserRequest.Username"></label>
-        <input type="text" class="form-control" asp-for="UserRequest.Username" placeholder="Enter Username">
-        <span asp-validation-for="UserRequest.Username" class="text-danger"></span>
-    </div>
-    <div class="form-group mt-3">
-        <label asp-for="UserRequest.Password"></label>
-        <input type="password" class="form-control" asp-for="UserRequest.Password" placeholder="Password">
-        <span asp-validation-for="UserRequest.Username" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-secondary mt-3" style="width: 150px">Login</button>
-</form>
 
-<div>
-    <a asp-page="/Register/Index">Register account</a>
+<div class="container">
+    <form method="post" class="box">
+        <div class="login">
+            <div class="alert alert-warning" role="alert" hidden id="notification">
+                A simple warning alert—check it out!
+            </div>
+            <h2>Đăng nhập</h2>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+           
+                <input type="text" class="form-control" asp-for="UserRequest.Username" placeholder="Tài khoản">
+                <span asp-validation-for="UserRequest.Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               
+                <input type="password" class="form-control" asp-for="UserRequest.Password" placeholder="Mật Khẩu">
+                <span asp-validation-for="UserRequest.Username" class="text-danger"></span>
+            </div>
+            <button type="submit" >Đăng nhập</button>
+            <div style="font-size:larger">Chưa có tài khoản? <a asp-page="/Register/Index">Đăng ký ngay</a></div>
+
+        </div>
+    </form>
 </div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    if (message) {
+        document.getElementById('notification').innerHTML = message
+        document.getElementById('notification').hidden = false
+    }
+
+    setTimeout(() => {
+        document.getElementById('notification').hidden = true
+    }, 5000)
+</script>
+
+
 

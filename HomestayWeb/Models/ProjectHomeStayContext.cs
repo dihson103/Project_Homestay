@@ -30,8 +30,14 @@ public partial class ProjectHomeStayContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=LAPTOP-LQOFJPF7\\SQLEXPRESS;Initial Catalog=Project_HomeStay; User ID=sa;Password=12345;Encrypt=false;TrustServerCertificate=true");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            var connectionString = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

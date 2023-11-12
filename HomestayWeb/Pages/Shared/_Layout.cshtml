@@ -29,13 +29,16 @@
                         @if (isAdmin)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Users/Index">Users management</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Users/Index">Users</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/HomeStays/Index">HomeStays management</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/HomeStays/Index">HomeStays</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Discounts/Index">Discounts management</a>
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Discounts/Index">Discounts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Orders/Index">Orders</a>
                             </li>
                         }
                     </ul>
@@ -47,12 +50,11 @@
                             <li class="nav-item">
                                 <a class="btn btn-link" asp-page="/Profile/Index">My Profile</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="btn btn-link" asp-page="/Orders/Index">My Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-link" asp-page="/Cart/Index">Cart</a>
-                            </li>
+                            @if(!isAdmin){
+                                <li class="nav-item">
+                                    <a class="btn btn-link" asp-page="/MyOrders/Index">My Orders</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <form method="post" asp-page="/Logout/Index">
                                     <button type="submit" class="btn btn-link">Logout</button>
@@ -71,8 +73,8 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <div class="alert alert-primary" role="alert" id="notification" hidden>
-                A simple primary alert—check it out!
+            <div class="alert alert-warning" role="alert" id="notification" hidden>
+                A simple warning alert—check it out!
             </div>
             @RenderBody()
         </main>

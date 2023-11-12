@@ -36,7 +36,7 @@ namespace HomestayWeb.Pages.HomeStays
 
             var homestay = await _context.Homestays
                 .Include(h => h.Images)
-                .FirstOrDefaultAsync(m => m.HomestayId == id);
+                .FirstOrDefaultAsync(m => m.HomestayId == id && m.Status);
 
             if (homestay == null)
             {
@@ -51,58 +51,122 @@ namespace HomestayWeb.Pages.HomeStays
 
         public IActionResult OnPostAddToCart(string? password, int id)
         {
+            try
+            {
+                // Authentication check
+                var username = AuthenticateUser();
+
+                if (!ModelState.IsValid)
+                {
+                    Homestay = _context.Homestays.Include(h => h.Images).SingleOrDefault(m => m.HomestayId == id && m.Status);
+                    return Page();
+                }
+
+                // Check homestay availability
+                CheckHomestayAvailability(id);
+
+                // Get user
+                var customer = GetUser(username, password);
+
+                // Create order
+                var order = CreateOrder(customer.UserId, id);
+
+                // Create order detail
+                CreateOrderDetail(order.OrderId, CartItem.DateStart, CartItem.DateEnd, id);
+
+                // Update homestay
+                UpdateHomestayStatus(id);
+
+                return RedirectToAction("/HomeStays/Details", new { id, message = "Order request is pending confirm" });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("/HomeStays/Details", new { id, message = ex.Message });
+            }
+        }
+
+        private string AuthenticateUser()
+        {
             var user = HttpContext.User;
             var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            string message;
 
             if (username == null)
             {
-                message = "Please login to order.";
-                return RedirectToPage("/Login/Index", new { message });
+                throw new Exception("Please login to order.");
             }
 
-            if(!ModelState.IsValid)
+            return username;
+        }
+
+        private void CheckHomestayAvailability(int id)
+        {
+            Homestay = _context.Homestays.Include(h => h.Images).SingleOrDefault(m => m.HomestayId == id && m.Status);
+
+            if (Homestay == null)
             {
-                Homestay = _context.Homestays.SingleOrDefault(m => m.HomestayId == id);
-                return Page();
+                throw new Exception($"Can not find homestay with id: {id}");
             }
 
+            if (!Homestay.Type.Equals(HomeStayType.AVAILABLE))
+            {
+                throw new Exception("This homestay is not available to order");
+            }
+        }
+
+        private User GetUser(string username, string password)
+        {
             if (password == null)
             {
-                message = "Please enter your password to order";
-                return RedirectToAction("/HomeStays/Details", new {id, message});
+                throw new Exception("Please enter your password to order");
             }
 
-            User? customer = _context.Users.SingleOrDefault(u => u.Password == password && u.Username == username);
-            if(customer == null)
+            var customer = _context.Users.SingleOrDefault(u => u.Password == password && u.Username == username);
+
+            if (customer == null)
             {
-                message = "Password is invalid";
-                return RedirectToAction("/HomeStays/Details", new { id, message });
+                throw new Exception("Password is invalid");
             }
 
+            return customer;
+        }
+
+        private Order CreateOrder(int userId, int homestayId)
+        {
             DateTime currentDate = DateTime.Now;
             Order order = new Order()
             {
-                UserId = customer.UserId,
-                HomestayId = id,
+                UserId = userId,
+                HomestayId = homestayId,
                 OrderDate = currentDate,
                 Status = OrderStatus.PENDING_CONFIRM
             };
+
             _context.Orders.Add(order);
             _context.SaveChanges();
 
-             
+            return order;
+        }
+
+        private void CreateOrderDetail(int orderId, DateTime fromDate, DateTime endDate, int homestayId)
+        {
             OrderDetail orderDetail = new OrderDetail()
             {
-                OrderId = order.OrderId,
-                FromDate = CartItem.DateStart,
-                EndDate = CartItem.DateEnd,
-                PriceWhenSell = getPriceWhenSell(id, currentDate),
+                OrderId = orderId,
+                FromDate = fromDate,
+                EndDate = endDate,
+                PriceWhenSell = getPriceWhenSell(homestayId, DateTime.Now),
                 IsPayment = false
             };
 
-            message = "Order request is pending confirm";
-            return RedirectToAction("/HomeStays/Details", new { id, message });
+            _context.OrderDetails.Add(orderDetail);
+            _context.SaveChanges();
+        }
+
+        private void UpdateHomestayStatus(int homestayId)
+        {
+            Homestay.Type = HomeStayType.ORDERED;
+            _context.Homestays.Update(Homestay);
+            _context.SaveChanges();
         }
 
         private decimal getPriceWhenSell(int homstayId, DateTime currentDate)
@@ -130,7 +194,7 @@ namespace HomestayWeb.Pages.HomeStays
                 return price < 0 ? 0 : price;
             }
 
-            throw new NotImplementedException();
+            throw new Exception("Homestay not found");
         }
 
     }

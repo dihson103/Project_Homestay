@@ -4,35 +4,32 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+<link href="~/css/Manager.css" rel="stylesheet" />
+<h1>Danh sách người dùng</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a class="btn_action" asp-page="Create">Thêm người dùng</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Username)
+               Tên tài khoản
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Email)
+               Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Role)
+               Vai trò
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Password)
+                Mật khẩu
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Fullname)
+               Tên đầy đủ
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Gender)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User[0].Status)
+                Giới tính
             </th>
             <th></th>
         </tr>
@@ -50,23 +47,45 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
+                <p>*********</p>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Fullname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gender)
+                 @(item.Gender == true ? "Nam" : "Nữ")
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                <div style="margin-top:5px;">
+                      <a class="btn_action" asp-page="./Edit" asp-route-id="@item.UserId">Edit</a>
+                </div>
+                <div style="margin-top:5px;">
+                     <a class="btn_action" asp-page="./Details" asp-route-id="@item.UserId">Details</a>
+
+                </div>
+                <div style="margin-top:5px;">
+                     <a class="btn_action" style="color:orange" asp-page="./Delete" asp-route-id="@item.UserId">Delete</a>
+                </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.User.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.User.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.User.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.User.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
