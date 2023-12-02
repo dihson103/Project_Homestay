@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HomestayWeb.Models;
+namespace HomestayWeb.Model;
 
 public partial class Homestay
 {
@@ -27,13 +27,13 @@ public partial class Homestay
 
     public string Description { get; set; } = null!;
 
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
     public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
 }

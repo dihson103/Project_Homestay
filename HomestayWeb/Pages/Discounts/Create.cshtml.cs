@@ -33,7 +33,7 @@ namespace HomestayWeb.Pages.Discounts
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Discounts == null || Discount == null)
+            if (!ModelState.IsValid || _context.Discounts == null || Discount == null)
             {
                 ViewData["HomestayName"] = new SelectList(_context.Homestays, "HomestayId", "HomestayName");
                 return Page();

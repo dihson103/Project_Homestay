@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomestayWeb.Models;
+namespace HomestayWeb.Model;
 
 public partial class ProjectHomeStayContext : DbContext
 {
