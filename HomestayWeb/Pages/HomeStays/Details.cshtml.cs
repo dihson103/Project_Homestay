@@ -53,6 +53,7 @@ namespace HomestayWeb.Pages.HomeStays
 
             var homestay = await _context.Homestays
                 .Include(h => h.Images)
+                .Include(h => h.Discounts)
                 .FirstOrDefaultAsync(m => m.HomestayId == id && m.Status);
             PriceWhenSell = getPriceSell(homestay);
 
