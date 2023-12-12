@@ -16,6 +16,8 @@
     <a asp-page="Create" class="btn btn-outline-dark">Tạo mới</a>
 </p>
 
+<button id="button" onclick="htmlTableToExcel('xlsx')">Export HTML Table to EXCEL</button>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -44,7 +46,7 @@
   </div>
 </div>
 
-<table class="table">
+<table class="table" id="tblToExcl">
     <thead>
         <tr>
             <th>
@@ -104,6 +106,8 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
 <script>
     const handleStartUpdate = (orderId, status) => {
         $('#orderIdInput').val(orderId)
@@ -113,4 +117,26 @@
     $('#btnUpdate').click(() => {
         $('#formUpdate').submit()
     })
+
+    function htmlTableToExcel(type) {
+        var data = document.getElementById('tblToExcl');
+
+        // Remove buttons from the cloned table
+        var buttons = data.querySelectorAll('button');
+        buttons.forEach(function (button) {
+            button.parentNode.removeChild(button);
+        });
+
+        // Remove links from the cloned table
+        var links = data.querySelectorAll('a');
+        links.forEach(function (link) {
+            link.parentNode.removeChild(link);
+        });
+
+        var excelFile = XLSX.utils.table_to_book(data, { sheet: "sheet1" });
+        XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
+        XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
+
+        location.reload();
+    }
 </script>
