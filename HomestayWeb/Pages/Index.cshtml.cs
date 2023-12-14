@@ -15,6 +15,12 @@ namespace HomestayWeb.Pages
         public string Ward { get; set; }
     } 
 
+    public class HomeStayDto
+    {
+        public Homestay Homestay { get; set; }
+        public decimal PriceWhenSell { get; set; }
+    }
+
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -27,16 +33,23 @@ namespace HomestayWeb.Pages
         }
 
         public List<Homestay> Homestays { get; set; }
+        public List<HomeStayDto> HomeStayDtos { get; set; }
         [BindProperty]
         public SearchDto Search { get; set; } = default!;
 
         public void OnGet()
         {
             Homestays = _context.Homestays
+                .Include(h => h.Discounts)
                 .Include(h => h.Images)
                 .Where(h => h.Status)
                 .ToList();
             Search = new SearchDto();
+            HomeStayDtos = Homestays.Select(h => new HomeStayDto
+            {
+                Homestay = h,
+                PriceWhenSell = getPriceSell(h)
+            }).ToList();
         }
 
         public void OnPost()
@@ -65,35 +78,56 @@ namespace HomestayWeb.Pages
 
             Homestays = query.ToList();
 
-        }
-
-        private decimal getPriceWhenSell(int homstayId, DateTime currentDate)
-        {
-            decimal price = 0;
-
-            List<Discount> discounts = _context.Discounts
-                .Where(d => d.HomstayId == homstayId && d.DateStart <= currentDate && d.DateEnd >= currentDate)
-                .ToList();
-
-            Homestay? homestay = _context.Homestays.SingleOrDefault(d => d.HomestayId == homstayId);
-
-            decimal totalDiscount = 0;
-            if (homestay != null)
+            HomeStayDtos = Homestays.Select(h => new HomeStayDto
             {
-                decimal homestayPrice = homestay.Price;
+                Homestay = h,
+                PriceWhenSell = getPriceSell(h)
+            }).ToList();
 
-                if (homestayPrice != 0 && discounts.Any())
-                {
-                    totalDiscount = discounts.Sum(x => ((decimal)x.Discount1 / 100) * homestayPrice);
-                }
-
-                price = homestay.Price - totalDiscount;
-
-                return price < 0 ? 0 : price;
-            }
-
-            throw new Exception("Homestay not found");
         }
+
+        private decimal getPriceSell(Homestay homestay)
+        {
+            var discount = homestay.Discounts;
+            var priceWhenSell = homestay.Price;
+            var currentDate = DateTime.Now;
+            if (discount != null)
+            {
+                decimal totalDiscount = discount
+                    .Where(d => d.DateStart <= currentDate && d.DateEnd >= currentDate)
+                    .Sum(x => ((decimal)x.Discount1 / 100) * priceWhenSell);
+                priceWhenSell -= totalDiscount;
+            }
+            return priceWhenSell;
+        }
+
+        //private decimal getPriceWhenSell(int homstayId, DateTime currentDate)
+        //{
+        //    decimal price = 0;
+
+        //    List<Discount> discounts = _context.Discounts
+        //        .Where(d => d.HomstayId == homstayId && d.DateStart <= currentDate && d.DateEnd >= currentDate)
+        //        .ToList();
+
+        //    Homestay? homestay = _context.Homestays.SingleOrDefault(d => d.HomestayId == homstayId);
+
+        //    decimal totalDiscount = 0;
+        //    if (homestay != null)
+        //    {
+        //        decimal homestayPrice = homestay.Price;
+
+        //        if (homestayPrice != 0 && discounts.Any())
+        //        {
+        //            totalDiscount = discounts.Sum(x => ((decimal)x.Discount1 / 100) * homestayPrice);
+        //        }
+
+        //        price = homestay.Price - totalDiscount;
+
+        //        return price < 0 ? 0 : price;
+        //    }
+
+        //    throw new Exception("Homestay not found");
+        //}
 
 
     }

@@ -75,7 +75,8 @@
             @Html.DisplayNameFor(model => model.Homestay.Price)
         </dt>
         <dd class="col-sm-10">
-                <p>@Model.Homestay.Price.ToString("0.00")</p>
+                <s style="color: red">@Model.Homestay.Price.ToString("0.00")</s>
+                <p>@Model.PriceWhenSell.ToString("0.00")</p>
 
         </dd>
         <dt>
