@@ -30,24 +30,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Order) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Homestay.HomestayName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Fullname)
-            </td>
-            <td>
-                   <a class="btn btn-outline-success" asp-page="/Orders/Details" asp-route-id="@item.OrderId">Details</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Order)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Homestay.HomestayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Fullname)
+                </td>
+                <td>
+                    <a class="btn btn-outline-success" asp-page="/Orders/Details" asp-route-id="@item.OrderId">Details</a>
+                    @if (item.Status == "CHECKED OUT")
+                    {
+                        <a asp-page="/MyOrders/Vote" class="btn btn-outline-success" asp-route-homestayId="@item.HomestayId">Vote</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script>
+    var message = "@TempData["Message"]";
+    if (message) {
+        setTimeout(function () {
+            alert("Bạn đã review homstay này rồi");
+        }, 1000);
+    }
+</script>

@@ -8,6 +8,8 @@
     var isAdmin = user.HasClaim(c => c.Type == "Role" && c.Value == "ADMIN");
 }
 <link href="~/css/detail.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!-- Modal structure -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -94,8 +96,31 @@
                 Khách có thể đỗ xe ô tô/xe máy trong căn hộ với mức phí 5.000 đồng/lượt vào; qua đêm 35.000đ/ lượt; ô tô là 15.000đ/giờ.
                 Highlands Coffee, rau tươi, Winmart +. Các cửa hàng trái cây, và một nhà thuốc cũng nằm trong khu phức hợp với chưa đầy 5 phút đi bộ.
         </dd>
+            <div class="row" style="margin-top: 20px;">
+                <h3>Homestay Votes</h3>
+                <ul>
+                    @foreach (var vote in Model.HomestayVotes)
+                    {
+                        <li style="background-color: #e0f7fa; padding: 10px; margin-bottom: 10px;">
+                            <strong>Rating:</strong>
+                            @for (int i = 0; i < vote.Rating; i++)
+                            {
+                                <span class="glyphicon glyphicon-star" style="color: gold;"></span>
+                            }
+                            @for (int i = vote.Rating; i < 5; i++)
+                            {
+                                <span class="glyphicon glyphicon-star-empty" style="color: gold;"></span>
+                            }
+                            , <strong>Review:</strong> @vote.Review
+                        </li>
+                    }
+                </ul>
+
+            </div>
+
     </dl>
 </div>
+
 
 <div class="col-md-4 ">
 @if (isAdmin)
@@ -161,5 +186,4 @@ else
         $('#orderForm').submit();
     });
 
-    
 </script>
