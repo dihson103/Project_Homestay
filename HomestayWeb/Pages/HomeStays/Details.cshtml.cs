@@ -24,6 +24,8 @@ namespace HomestayWeb.Pages.HomeStays
         }
 
         public Homestay Homestay { get; set; } = default!;
+        public List<Vote> HomestayVotes { get; set; } = new List<Vote>();
+
         [BindProperty]
         public CartItem CartItem { get; set; } = default!;
         public decimal PriceWhenSell { get; set; }
@@ -39,31 +41,46 @@ namespace HomestayWeb.Pages.HomeStays
             var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var role = user.FindFirst("Role")?.Value;
 
-            if(!string.IsNullOrEmpty(role) && "ADMIN".Equals(role))
+            if (!string.IsNullOrEmpty(role) && "ADMIN".Equals(role))
             {
                 Homestay = await _context.Homestays
-                        .Include(h => h.Images)
-                        .Include(h => h.Discounts)
-                        .FirstOrDefaultAsync(m => m.HomestayId == id);
+                    .Include(h => h.Images)
+                    .Include(h => h.Discounts)
+                    .Include(h => h.Votes)
+                    .FirstOrDefaultAsync(m => m.HomestayId == id);
+                try
+                {
+                    HomestayVotes = Homestay.Votes.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 PriceWhenSell = getPriceSell(Homestay);
-                
+
                 return Page();
             }
 
             var homestay = await _context.Homestays
-                .Include(h => h.Images)
-                .Include(h => h.Discounts)
-                .FirstOrDefaultAsync(m => m.HomestayId == id && m.Status);
+                 .Include(h => h.Images)
+                 .Include(h => h.Discounts)
+                 .Include(h => h.Votes)
+                 .FirstOrDefaultAsync(m => m.HomestayId == id && m.Status);
             PriceWhenSell = getPriceSell(homestay);
 
             if (homestay == null)
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Homestay = homestay;
+                var userIds = homestay.Votes.Select(v => v.UserId).ToList();
+                var voters = await _context.Users
+                .Where(u => userIds.Contains(u.UserId))
+                .ToDictionaryAsync(u => u.UserId);
+                HomestayVotes = homestay.Votes.ToList();
             }
             return Page();
         }

@@ -1,8 +1,9 @@
 ﻿@page
-@model HomestayWeb.Pages.Login.IndexModel
+@model HomestayWeb.Pages.ForgotPassword.IndexModel
 @{
     Layout = null;
 }
+
 <link href="~/css/login.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -12,29 +13,22 @@
     <source src="~/Images/pexels-timo-volz-6528707 (2160p).mp4" />
 </video>
 
+
 <div class="container">
     <form method="post" class="box">
         <div class="login">
             <div class="alert alert-warning" role="alert" hidden id="notification">
                 A simple warning alert—check it out!
             </div>
-            <h2>Đăng nhập</h2>
+            <h2>Quên mật khẩu</h2>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-           
-                <input type="text" class="form-control" asp-for="UserRequest.Username" placeholder="Tài khoản">
-                <span asp-validation-for="UserRequest.Username" class="text-danger"></span>
+                <input type="email" class="form-control" asp-for="UserRequest.Email" placeholder="Địa chỉ Email">
+                <span asp-validation-for="UserRequest.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
-               
-                <input type="password" class="form-control" asp-for="UserRequest.Password" placeholder="Mật Khẩu">
-                <span asp-validation-for="UserRequest.Username" class="text-danger"></span>
-            </div>
-            <button type="submit">Đăng nhập</button>
-            <div style="font-size:larger">Chưa có tài khoản? <a asp-page="/Register/Index" style="color:#8f0471">Đăng ký ngay</a></div>
-            <!-- Forgot Password link -->
-            <div style="margin-top: 10px; font-size: larger;">
-                <a asp-page="/ForgotPassword/Index" style="color: #8f0471">Quên mật khẩu?</a>
+            <button type="submit">Gửi yêu cầu</button>
+            <div style="font-size:larger">
+                <a asp-page="/Login/Index" style="color:#8f0471">Quay lại trang đăng nhập</a>
             </div>
         </div>
     </form>
@@ -52,6 +46,3 @@
         document.getElementById('notification').hidden = true
     }, 5000)
 </script>
-
-
-
