@@ -28,6 +28,14 @@ namespace HomestayWeb.Pages.HomeStays
         public CartItem CartItem { get; set; } = default!;
         public decimal PriceWhenSell { get; set; }
 
+        public List<Comment> comments { get; set; }
+
+        [BindProperty]
+        public int HomestayId { get; set; }
+
+        [BindProperty]
+        public string CommentContent { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null || _context.Homestays == null)
@@ -37,9 +45,11 @@ namespace HomestayWeb.Pages.HomeStays
 
             var user = HttpContext.User;
             var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = _context.Users.Where(u => u.Username == username)
+                .Select(u => u.UserId).FirstOrDefault();
             var role = user.FindFirst("Role")?.Value;
 
-            if(!string.IsNullOrEmpty(role) && "ADMIN".Equals(role))
+            if (!string.IsNullOrEmpty(role) && "ADMIN".Equals(role))
             {
                 Homestay = await _context.Homestays
                         .Include(h => h.Images)
@@ -47,9 +57,15 @@ namespace HomestayWeb.Pages.HomeStays
                         .FirstOrDefaultAsync(m => m.HomestayId == id);
 
                 PriceWhenSell = getPriceSell(Homestay);
-                
+
                 return Page();
             }
+
+            comments = await _context.Comments
+                .Include(c => c.User)
+                .Where(c => c.HomestayId == id)
+                .OrderByDescending(c => c.Time)
+                .ToListAsync();
 
             var homestay = await _context.Homestays
                 .Include(h => h.Images)
@@ -60,11 +76,40 @@ namespace HomestayWeb.Pages.HomeStays
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Homestay = homestay;
             }
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddCommentAsync()
+        {
+            // Thêm bình luận vào cơ sở dữ liệu
+            var user = HttpContext.User;
+            var username = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var userId = _context.Users.Where(u => u.Username == username)
+                .Select(u => u.UserId).FirstOrDefault();
+
+            // Lấy ID cuối cùng sau khi thêm mới
+            int lastId = _context.Comments.OrderByDescending(x => x.Id).Select(x => x.Id).FirstOrDefault();
+
+
+            var comment = new Comment
+            {
+                Id = lastId + 1,
+                UserId = userId,
+                HomestayId = HomestayId,
+                Content = CommentContent,
+                Time = DateTime.Now
+            };
+
+            _context.Comments.AddAsync(comment);
+            await _context.SaveChangesAsync();
+
+            // Refresh lại trang để hiển thị bình luận mới
+            return RedirectToPage("/HomeStays/Details", new { id = HomestayId });
         }
 
         private decimal getPriceSell(Homestay homestay)

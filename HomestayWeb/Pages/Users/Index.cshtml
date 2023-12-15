@@ -27,8 +27,9 @@
 
 <p>
     <a class="btn_action" asp-page="Create">Thêm người dùng</a>
+    <button id="button" onclick="htmlTableToExcel('xlsx')">Export HTML Table to EXCEL</button>
 </p>
-<table class="table">
+<table class="table" id="tblToExcl">
     <thead>
         <tr>
             <th>
@@ -107,3 +108,31 @@
    class="btn btn-primary @nextDisabled">
     Next
 </a>
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script>
+    function htmlTableToExcel(type) {
+        var data = document.getElementById('tblToExcl');
+        var excludeColumns = [6];
+        for (var i = 0; i < excludeColumns.length; i++) {
+            var columnIndex = excludeColumns[i];
+
+            // Lấy tất cả th và td của cột được xác định
+            var cells = data.querySelectorAll('th:nth-child(' + (columnIndex + 1) + '), td:nth-child(' + (columnIndex + 1) + ')');
+
+            // Lặp qua từng cell và kiểm tra sự tồn tại trước khi xóa
+            for (var j = 0; j < cells.length; j++) {
+                var cell = cells[j];
+                if (cell && cell.parentNode) {
+                    cell.parentNode.removeChild(cell);
+                }
+            }
+        }
+
+        var excelFile = XLSX.utils.table_to_book(data, { sheet: "sheet1" });
+        XLSX.write(excelFile, { bookType: type, bookSST: true, type: 'base64' });
+        XLSX.writeFile(excelFile, 'ExportedFile:HTMLTableToExcel.' + type);
+
+        location.reload();
+    }
+</script>

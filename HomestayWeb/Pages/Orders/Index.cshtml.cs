@@ -22,6 +22,7 @@ namespace HomestayWeb.Pages.Orders
             _hubContext = hub;
         }
 
+
         public IList<Order> Order { get;set; } = default!;
 
         public async Task OnGetAsync()

@@ -20,7 +20,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="password" placeholder="Password" class="form-control" id="confirm-password"/>
+                <input type="password" placeholder="Password" class="form-control" id="confirm-password" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -51,89 +51,120 @@
 </div>
 <div class="row" style="margin-top:40px;">
     <h3>Homestay @Html.DisplayFor(model => model.Homestay.HomestayName) </h3>
-    
-<div class="col-md-8">
 
-  
-
-    <dl class="row">
+    <div class="col-md-8">
+        <dl class="row">
             <dt class="col-sm-5">
                 Tình trạng phòng
             </dt>
             <dd class="col-sm-7" style="color:#e67070 ">
                 @Html.DisplayFor(model => model.Homestay.Type)
             </dd>
-        <dt>
-            Là một HomeStay đầy mộng mơ nằm tại
+            <dt>
+                Là một HomeStay đầy mộng mơ nằm tại
                 @Html.DisplayFor(model => model.Homestay.Commune) @Html.DisplayFor(model => model.Homestay.District) của @Html.DisplayFor(model => model.Homestay.City).
-                Địa chỉ cụ thể : @Html.DisplayFor(model => model.Homestay.Address) 
-        </dt>
-        
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Homestay.Price)
-        </dt>
-        <dd class="col-sm-10">
+                Địa chỉ cụ thể : @Html.DisplayFor(model => model.Homestay.Address)
+            </dt>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Homestay.Price)
+            </dt>
+            <dd class="col-sm-10">
                 <p>@Model.Homestay.Price.ToString("0.00")</p>
 
-        </dd>
-        <dt>
-            Mô tả chi tiết :
-        </dt>
-        <dd class="col-sm-12">
-            @Html.DisplayFor(model => model.Homestay.Description)
-        </dd>
-        <dt>
+            </dd>
+            <dt>
+                Mô tả chi tiết :
+            </dt>
+            <dd class="col-sm-12">
+                @Html.DisplayFor(model => model.Homestay.Description)
+            </dd>
+            <dt>
                 Tiện nghi khách có quyền sử dụng
-        </dt>
-        <dd>
+            </dt>
+            <dd>
                 Bạn sẽ có toàn bộ căn hộ cho riêng mình trong thời gian lưu trú.
                 Căn hộ riêng tư với đầy đủ tiện nghi. Bao gồm giường cỡ queen, phòng tắm riêng, điều hòa không khí, TV internet, Wifi miễn phí, tủ lạnh, đồ vệ sinh cá nhân, máy sấy tóc, lược, bàn chải đánh răng, xà phòng rửa tay.
                 Bạn có thể tận hưởng bể bơi ngoài trời hiện đại, bể bơi trong nhà, tập thể dục trong phòng tập thể dục được trang bị đầy đủ tiện nghi. Phí cho người không phải là cư dân là 200.000 VND/người/lần.
-        </dd>
-        <dd>
+            </dd>
+            <dd>
                 Khách có thể đỗ xe ô tô/xe máy trong căn hộ với mức phí 5.000 đồng/lượt vào; qua đêm 35.000đ/ lượt; ô tô là 15.000đ/giờ.
                 Highlands Coffee, rau tươi, Winmart +. Các cửa hàng trái cây, và một nhà thuốc cũng nằm trong khu phức hợp với chưa đầy 5 phút đi bộ.
-        </dd>
-    </dl>
-</div>
+            </dd>
+        </dl>
+    </div>
 
-<div class="col-md-4 ">
-@if (isAdmin)
-{
-    <div class="text-center action-admin">
+    <div class="col-md-4 ">
+        @if (isAdmin)
+        {
+            <div class="text-center action-admin">
                 <div style="margin:50px;"><a class="btn-success" asp-page="./Edit" asp-route-id="@Model.Homestay?.HomestayId">Chỉnh sửa thông tin</a> </div>
                 <div style="margin:50px;"><a class="btn-danger" asp-page="./Index">Trở về trang danh sách</a></div>
-        
+
+            </div>
+        }
+        else
+        {
+            <div class=" border border-success form-book">
+                <form method="post" asp-page-handler="AddToCart" id="orderForm">
+                <dt>
+                        @Html.DisplayFor(model => model.Homestay.Price) VNĐ / Ngày
+                </dt>
+
+                <input asp-for="CartItem.HomeStayId" class="form-control" name="id" hidden value="@Model.Homestay.HomestayId" />
+                <input type="text" name="password" id="password" hidden />
+                <div class="form-group">
+                    <label asp-for="CartItem.DateStart" class="control-label">Ngày bắt đầu</label>
+                    <input asp-for="CartItem.DateStart" class="form-control" />
+                    <span asp-validation-for="CartItem.DateStart" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CartItem.DateEnd" class="control-label">Ngày kết thúc</label>
+                    <input asp-for="CartItem.DateEnd" class="form-control" />
+                    <span asp-validation-for="CartItem.DateEnd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="button" value="Order" data-toggle="modal" data-target="#exampleModalCenter" class="btn_order" />
+                </div>
+                </form>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Bình luận -->
+<h4>Bình luận</h4>
+@if (Model.comments != null)
+{
+    <div>
+        @foreach (var comment in Model.comments)
+        {
+            <div>
+                <strong>@comment.User.Username:</strong>
+                <span>@comment.Content</span>
+                <span>@comment.Time</span>
+            </div>
+        }
     </div>
 }
 else
 {
-            <div class=" border border-success form-book">
-        <form method="post" asp-page-handler="AddToCart" id="orderForm">
-                <dt>
-                        @Html.DisplayFor(model => model.Homestay.Price) VNĐ / Ngày
-                </dt>
-                    
-            <input asp-for="CartItem.HomeStayId" class="form-control" name="id" hidden value="@Model.Homestay.HomestayId" />
-            <input type="text" name="password" id="password" hidden />
-            <div class="form-group">
-                <label asp-for="CartItem.DateStart" class="control-label">Ngày bắt đầu</label>
-                <input asp-for="CartItem.DateStart" class="form-control" />
-                <span asp-validation-for="CartItem.DateStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CartItem.DateEnd" class="control-label">Ngày kết thúc</label>
-                <input asp-for="CartItem.DateEnd" class="form-control" />
-                <span asp-validation-for="CartItem.DateEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                        <input type="button" value="Order" data-toggle="modal" data-target="#exampleModalCenter" class="btn_order" />
-            </div>
-        </form>
-    </div>
+    <p>Không có bình luận nào.</p>
 }
+
+
+<!-- Form để thêm bình luận -->
+<form method="post" asp-page-handler="AddComment" id="commentForm">
+    <input type="hidden" asp-for="HomestayId" value="@Model.Homestay.HomestayId" />
+    <div class="form-group">
+        <label asp-for="CommentContent" class="control-label">Nội dung bình luận:</label>
+        <textarea asp-for="CommentContent" class="form-control"></textarea>
+        <span asp-validation-for="CommentContent" class="text-danger"></span>
     </div>
-</div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Thêm bình luận</button>
+    </div>
+</form>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -148,11 +179,11 @@ else
     axios.get(host + 'p/@disctrict')
         .then((response) => {
             document.getElementById('province').innerHTML = `
-                <dt class="col-sm-2" id="province">
-                        ${response.data.name}
-            </dt>
-            `
-            
+                    <dt class="col-sm-2" id="province">
+                            ${response.data.name}
+                </dt>
+                `
+
             console.log(response.data.name)
         });
 
@@ -160,6 +191,4 @@ else
         $('#password').val($('#confirm-password').val());
         $('#orderForm').submit();
     });
-
-    
 </script>
